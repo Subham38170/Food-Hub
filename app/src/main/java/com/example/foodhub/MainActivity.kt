@@ -26,9 +26,14 @@ class MainActivity : ComponentActivity() {
             FoodHubTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
 
-
+                    Text(
+                        text = "Hello Android"
+                    )
                 }
             }
         }
     }
 }
+
+
+
