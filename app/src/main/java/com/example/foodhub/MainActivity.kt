@@ -26,6 +26,7 @@ class MainActivity : ComponentActivity() {
             FoodHubTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
 
+
                 }
             }
         }
