@@ -1,4 +1,4 @@
-package com.example.foodhub.ui.theme
+package com.example.foodhub.screens.ui.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
