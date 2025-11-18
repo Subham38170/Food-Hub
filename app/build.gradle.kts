@@ -5,6 +5,7 @@ plugins {
 
     id("com.google.devtools.ksp")
     id("com.google.dagger.hilt.android")
+    id("com.google.gms.google-services")
 
 }
 
@@ -65,10 +66,20 @@ dependencies {
 
     //Dagger-Hilt
 
-    implementation("com.google.dagger:hilt-android:2.51.1")
-    ksp("com.google.dagger:hilt-android-compiler:2.51.1")
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.android.compiler)
 
 
     //Splash screen
     implementation(libs.androidx.core.splashscreen)
+
+
+    //Retrofit
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+    implementation(libs.logging.interceptor)
+
+    //Firebase
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
 }

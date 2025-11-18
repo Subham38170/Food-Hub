@@ -1,0 +1,29 @@
+[33mcommit d85a9037eb2f8a0a848ce8e34d7ecd3f3219f04e[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m
+Author: Subham Sahu <ssahu38170@gmail.com>
+Date:   Mon Nov 17 19:50:23 2025 +0530
+
+    Setup DI in project
+
+[33mcommit f5a3803e6b1704eb8e390d34a014360c0377caf9[m
+Author: Subham Sahu <ssahu38170@gmail.com>
+Date:   Mon Nov 17 19:43:33 2025 +0530
+
+    Add Dagger Hilt dependency
+
+[33mcommit 68531be3751217b0cba0b649e8b8b5b0dc10437f[m
+Author: Subham Sahu <ssahu38170@gmail.com>
+Date:   Mon Nov 17 19:36:17 2025 +0530
+
+    Set Poppins as default font family
+
+[33mcommit e91a50f590366fcb1d94c6522df4d8320b5dada5[m
+Author: Subham Sahu <ssahu38170@gmail.com>
+Date:   Mon Nov 17 19:19:05 2025 +0530
+
+    Add Basic Setup with Font Poppin
+
+[33mcommit 005de9f03102f1bbab6bcf55720df50775b1428f[m
+Author: Subham Sahu <ssahu38170@gmail.com>
+Date:   Mon Nov 17 19:00:52 2025 +0530
+
+    Initial commit after adding dependencies

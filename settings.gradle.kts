@@ -21,4 +21,3 @@ dependencyResolutionManagement {
 
 rootProject.name = "Food Hub"
 include(":app")
- 
