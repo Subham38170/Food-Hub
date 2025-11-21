@@ -1,30 +1,33 @@
 package com.example.foodhub.screens.auth.sign_up_screen
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.foodhub.R
@@ -35,6 +38,8 @@ import com.example.foodhub.screens.components.CustomizedPasswordTextField
 import com.example.foodhub.screens.components.CustomizedTextButton
 import com.example.foodhub.screens.components.FGButton
 import com.example.foodhub.screens.components.TextWithHorizontalDivider
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 /***
  * Sign Up screen contains 3 options for sign up process
@@ -45,17 +50,49 @@ import com.example.foodhub.screens.components.TextWithHorizontalDivider
 
 
 @Composable
-fun SignUpScreen() {
+fun SignUpScreen(
+    viewModel: SignUpViewModel
+) {
+    //Hosts snackbar on screen if any effect collected
+    val snackbarHostState = remember { SnackbarHostState() }
+    //Context
+    val context = LocalContext.current
+    //State of this screen collected from viewmoderl
+    val state by viewModel.uiState.collectAsState()
 
-    var fullName by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
+    //Collects effects recieved from viewmodel which includes toast,snack bar for error , navigations for different screens
+    LaunchedEffect(true) {
+        viewModel.uiEffect.collectLatest { effect ->
+            when (effect) {
+                is SignUpEffect.NavigateToFacebook -> {
 
+                }
+
+                is SignUpEffect.NavigateToGoogle ->  {
+
+                }
+
+                is SignUpEffect.NavigateToSignIn -> {
+
+                }
+
+                is SignUpEffect.ShowSnackbar -> {
+                    snackbarHostState.showSnackbar(message = effect.message)
+                }
+
+                is SignUpEffect.ShowToast -> {
+                    Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
     //Root container for Sign Up Screen
     Box(
         modifier = Modifier
             .fillMaxSize()
     ) {
+
+        //Background Image
         Image(
             painter = painterResource(id = R.drawable.sign_up_screen_background),
             contentDescription = "Back ground image",
@@ -63,7 +100,7 @@ fun SignUpScreen() {
             modifier = Modifier
                 .fillMaxSize()
         )
-
+        //Main container contains other sub containers and content
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -72,6 +109,7 @@ fun SignUpScreen() {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceEvenly
         ) {
+            //Title : Sign Up
             Text(
                 text = "Sign Up",
                 color = Color.Black,
@@ -80,21 +118,24 @@ fun SignUpScreen() {
                 modifier = Modifier
                     .fillMaxWidth()
             )
+
             Spacer(modifier = Modifier.height(20.dp))
+            //Customized text field to collect user name
             CustomizedOutlinedTextField(
-                value = fullName,
+                value = state.name,
                 onValueChange = {
-                    fullName = it
+                    viewModel.onEvent(SignUpEvent.onNameChanged(it))
                 },
                 placeHolder = "Enter your full name",
                 label = "Full name",
                 modifier = Modifier
                     .fillMaxWidth()
             )
+            //Customized text field to collect user email
             CustomizedOutlinedTextField(
-                value = email,
+                value = state.email,
                 onValueChange = {
-                    email = it
+                    viewModel.onEvent(SignUpEvent.onEmailChanged(it))
                 },
                 placeHolder = "Your e-mail",
                 label = "Email",
@@ -102,29 +143,35 @@ fun SignUpScreen() {
                     .fillMaxWidth(),
                 keyboardType = KeyboardType.Email
             )
+            //Customized text field to collect password
             CustomizedPasswordTextField(
-                value = password,
-                onValueChange = { password = it },
+                value = state.password,
+                onValueChange = {
+                    viewModel.onEvent(SignUpEvent.onPasswordChanged(it))
+                },
                 modifier = Modifier
                     .fillMaxWidth(),
                 placeHolder = "Password",
                 label = "Password"
             )
+            //Customized Sign up button
             CustomizedElevatedButton(
                 text = "Sign Up",
                 onClick = {
-
+                    if(!state.isLoading) viewModel.onEvent(SignUpEvent.onSignUpClick)
                 },
                 modifier = Modifier
                     .width(240.dp)
                     .padding(top = 20.dp)
             )
+            //Login button to navigate to login screen
             CustomizedTextButton(
                 onClick = {},
                 text = "Login",
                 prefixText = "Already have an account?",
                 prefixTextColor = Color.Black
             )
+            //Sub container contains facebook and google sign Up buttons
             Column {
                 TextWithHorizontalDivider(
                     modifier = Modifier
@@ -132,9 +179,11 @@ fun SignUpScreen() {
                     text = "Sign up with",
                     color = Color.Black
                 )
-                Spacer(modifier = Modifier
-                    .height(4.dp)
+                Spacer(
+                    modifier = Modifier
+                        .height(4.dp)
                 )
+                //Button with Facebook and Google symbol for Sign Up using facebook or google  account
                 FGButton(
                     onGoogleButtonClick = {
 
@@ -148,6 +197,11 @@ fun SignUpScreen() {
                 )
             }
         }
+        SnackbarHost(
+            hostState = snackbarHostState,
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+        )
 
     }
 }

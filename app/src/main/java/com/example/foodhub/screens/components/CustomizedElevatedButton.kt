@@ -2,6 +2,7 @@ package com.example.foodhub.screens.components
 
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -17,7 +18,9 @@ import com.example.foodhub.screens.ui.theme.Orange
 fun CustomizedElevatedButton(
     text: String,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    showCircularProgressIndicator: Boolean = false
+
 ) {
 
     ElevatedButton(
@@ -29,11 +32,15 @@ fun CustomizedElevatedButton(
             contentColor = Color.White
         )
     ) {
-        Text(
-            text = text,
-            fontSize = 18.sp,
-            fontWeight = FontWeight.Bold
-        )
+        if (showCircularProgressIndicator) {
+            CircularProgressIndicator()
+        } else {
+            Text(
+                text = text,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold
+            )
+        }
     }
 
 }
