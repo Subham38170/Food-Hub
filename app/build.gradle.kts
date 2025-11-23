@@ -83,4 +83,12 @@ dependencies {
     //Firebase
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)
+
+    //Firestore
+    implementation("com.google.firebase:firebase-firestore")
+
+    //Firebase Auth
+    implementation("com.google.firebase:firebase-auth")
+
+
 }

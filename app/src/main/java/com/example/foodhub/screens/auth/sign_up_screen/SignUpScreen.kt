@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -60,6 +62,9 @@ fun SignUpScreen(
     //State of this screen collected from viewmoderl
     val state by viewModel.uiState.collectAsState()
 
+
+    //For scrollable screen
+    val scrollState = rememberScrollState()
     //Collects effects recieved from viewmodel which includes toast,snack bar for error , navigations for different screens
     LaunchedEffect(true) {
         viewModel.uiEffect.collectLatest { effect ->
@@ -105,7 +110,8 @@ fun SignUpScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(top = Constants.TopAppScreenPadding)
-                .padding(horizontal = 20.dp),
+                .padding(horizontal = 20.dp)
+                .verticalScroll(scrollState),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceEvenly
         ) {
@@ -202,6 +208,5 @@ fun SignUpScreen(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
         )
-
     }
 }
