@@ -9,8 +9,10 @@ import com.example.foodhub.domain.repository.AuthRepository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import jakarta.inject.Inject
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.tasks.await
 
 class AuthRepositoryImpl @Inject constructor(
@@ -36,7 +38,8 @@ class AuthRepositoryImpl @Inject constructor(
         } catch (e: Exception) {
             emit(Result.Error(e.message ?: "Login Failed"))
         }
-    }
+
+    }.flowOn(Dispatchers.IO)
 
     override fun signUpWithEmailAndPassword(
         fullName: String,
@@ -62,7 +65,7 @@ class AuthRepositoryImpl @Inject constructor(
         } catch (e: Exception) {
             emit(Result.Error(e.message ?: "SignUp Failed. Please try again"))
         }
-    }
+    }.flowOn(Dispatchers.IO)
 
 
 }

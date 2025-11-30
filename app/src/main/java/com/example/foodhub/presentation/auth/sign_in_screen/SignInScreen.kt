@@ -1,5 +1,6 @@
 package com.example.foodhub.presentation.auth.sign_in_screen
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -10,16 +11,20 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -33,13 +38,54 @@ import com.example.foodhub.presentation.components.CustomizedPasswordTextField
 import com.example.foodhub.presentation.components.CustomizedTextButton
 import com.example.foodhub.presentation.components.FGButton
 import com.example.foodhub.presentation.components.TextWithHorizontalDivider
+import com.example.foodhub.presentation.navigation.Routes
+import kotlinx.coroutines.launch
 
 
 @Composable
-fun SignInScreen() {
+fun SignInScreen(
+    viewModel: SignInViewModel,
+    navigate: (Routes) -> Unit
+) {
+    //Snackbar host State
+    val snackbarHostState = remember { SnackbarHostState() }
 
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
+    val context = LocalContext.current
+
+    val scope = rememberCoroutineScope()
+
+    val state by viewModel.uiState.collectAsState()
+
+    LaunchedEffect(Unit) {
+        viewModel.uiEffect.collect { effect ->
+
+            when (effect) {
+                is SignInEffect.navigateToForgetPasswordScreen -> {
+
+                }
+
+                is SignInEffect.navigateToHomeScreen -> {
+                    navigate(Routes.HomeScreen)
+                }
+
+                is SignInEffect.navigateToSignUpScreen -> {
+                    navigate(Routes.SignUpScreen)
+                }
+
+                is SignInEffect.showSnackbar -> {
+                    scope.launch {
+                        snackbarHostState.showSnackbar(effect.message)
+                    }
+
+                }
+
+                is SignInEffect.showToast -> {
+                    Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+
+    }
 
     //Root container for Sign Up Screen
     Box(
@@ -72,9 +118,9 @@ fun SignInScreen() {
             )
 
             CustomizedOutlinedTextField(
-                value = email,
+                value = state.email,
                 onValueChange = {
-                    email = it
+                    viewModel.onEvent(SignInEvent.onEmailChange(it))
                 },
                 placeHolder = "Your e-mail",
                 label = "Email",
@@ -83,8 +129,10 @@ fun SignInScreen() {
                 keyboardType = KeyboardType.Email
             )
             CustomizedPasswordTextField(
-                value = password,
-                onValueChange = { password = it },
+                value = state.password,
+                onValueChange = {
+                    viewModel.onEvent(SignInEvent.onPasswordChange(it))
+                },
                 modifier = Modifier
                     .fillMaxWidth(),
                 placeHolder = "Password",
@@ -92,18 +140,25 @@ fun SignInScreen() {
             )
             CustomizedTextButton(
                 text = "Forgot password?",
-                onClick = {}
+                onClick = {
+                    viewModel.onEvent(SignInEvent.onForgotPasswordClick)
+                }
             )
             CustomizedElevatedButton(
-                text = "Sign Up",
+                text = "Login",
                 onClick = {
-
+                    viewModel.onEvent(SignInEvent.onSignInClick)
                 },
                 modifier = Modifier
-                    .width(240.dp)
+                    .width(240.dp),
+                loading = state.isLoading
             )
             CustomizedTextButton(
-                onClick = {},
+                onClick = {
+                    viewModel.onEvent(SignInEvent.onSignUpClick)
+                },
+                enabled = !state.isLoading,
+
                 text = "Sign Up",
                 prefixText = "Don't have an account?",
                 prefixTextColor = Color.Black
@@ -111,7 +166,7 @@ fun SignInScreen() {
             Column(
                 modifier = Modifier
                     .padding(bottom = 40.dp)
-            ){
+            ) {
                 TextWithHorizontalDivider(
                     modifier = Modifier
                         .fillMaxWidth(),
@@ -124,16 +179,22 @@ fun SignInScreen() {
                 )
                 FGButton(
                     onGoogleButtonClick = {
-
+                        viewModel.onEvent(SignInEvent.onGoogleClick)
                     },
                     onFaceBookButtonClick = {
-
+                        viewModel.onEvent(SignInEvent.onFacebookClick)
                     },
                     modifier = Modifier
                         .fillMaxWidth()
                 )
             }
+
         }
+        SnackbarHost(
+            hostState = snackbarHostState,
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+        )
 
     }
 

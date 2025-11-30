@@ -37,7 +37,10 @@ import com.example.foodhub.presentation.ui.theme.Orange
  */
 
 @Composable
-fun AuthScreen() {
+fun AuthScreen(
+    navigateToSignInScreen: () -> Unit,
+    navigateToSignUpScreen: () -> Unit
+) {
 
     //Background color -> With gradient over the background image
     val brush = Brush.verticalGradient(
@@ -89,7 +92,7 @@ fun AuthScreen() {
 
             //Register with email or phone
             EmailPhoneButton(
-                onClick = {}
+                onClick = navigateToSignUpScreen
             )
 
             //Sign In Button for those who have already account
@@ -98,7 +101,7 @@ fun AuthScreen() {
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp),
-                onClick = {},
+                onClick = navigateToSignInScreen,
                 prefixText = "Already have an account?"
             )
         }

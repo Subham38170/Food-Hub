@@ -23,7 +23,8 @@ fun CustomizedTextButton(
     text: String,
     modifier: Modifier = Modifier,
     prefixText: String? = null,
-    prefixTextColor: Color = Color.White
+    prefixTextColor: Color = Color.White,
+    enabled: Boolean = true
 ) {
     Row(
         modifier = modifier,
@@ -38,7 +39,9 @@ fun CustomizedTextButton(
             )
         }
         TextButton(
-            onClick = onClick, contentPadding = PaddingValues(0.dp)
+            onClick = onClick,
+            contentPadding = PaddingValues(0.dp),
+            enabled = enabled
         ) {
             Text(
 

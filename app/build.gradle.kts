@@ -7,6 +7,8 @@ plugins {
     id("com.google.dagger.hilt.android")
     id("com.google.gms.google-services")
 
+    kotlin("plugin.serialization") version "2.1.0"
+
 }
 
 android {
@@ -85,10 +87,24 @@ dependencies {
     implementation(libs.firebase.analytics)
 
     //Firestore
-    implementation("com.google.firebase:firebase-firestore")
+    implementation(libs.firebase.firestore)
 
     //Firebase Auth
-    implementation("com.google.firebase:firebase-auth")
+    implementation(libs.firebase.auth)
 
+    //Navigation 3
+    implementation(libs.androidx.navigation3.runtime)
+    implementation(libs.androidx.navigation3.ui)
+    implementation(libs.androidx.lifecycle.viewmodel.navigation3)
+
+
+    //Serialization
+    implementation(libs.kotlinx.serialization.json)
+
+
+    // ViewModel
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    // ViewModel utilities for Compose
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
 
 }

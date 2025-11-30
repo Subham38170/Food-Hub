@@ -1,5 +1,6 @@
 package com.example.foodhub.presentation.auth.sign_up_screen
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.foodhub.core.Result
@@ -52,7 +53,9 @@ class SignUpViewModel @Inject constructor(
             }
 
             is SignUpEvent.onLoginClick -> {
-
+                viewModelScope.launch(Dispatchers.IO) {
+                    _uiEffect.emit(SignUpEffect.NavigateToSignIn)
+                }
             }
 
             is SignUpEvent.onNameChanged -> {

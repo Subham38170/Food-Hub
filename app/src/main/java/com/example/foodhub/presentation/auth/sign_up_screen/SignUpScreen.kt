@@ -39,6 +39,7 @@ import com.example.foodhub.presentation.components.CustomizedPasswordTextField
 import com.example.foodhub.presentation.components.CustomizedTextButton
 import com.example.foodhub.presentation.components.FGButton
 import com.example.foodhub.presentation.components.TextWithHorizontalDivider
+import com.example.foodhub.presentation.navigation.Routes
 import kotlinx.coroutines.flow.collectLatest
 
 /***
@@ -51,7 +52,8 @@ import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun SignUpScreen(
-    viewModel: SignUpViewModel
+    viewModel: SignUpViewModel,
+    navigate: (Routes) -> Unit
 ) {
     //Hosts snackbar on screen if any effect collected
     val snackbarHostState = remember { SnackbarHostState() }
@@ -72,11 +74,10 @@ fun SignUpScreen(
                 }
 
                 is SignUpEffect.NavigateToGoogle -> {
-
                 }
 
                 is SignUpEffect.NavigateToSignIn -> {
-
+                    navigate(Routes.SignInScreen)
                 }
 
                 is SignUpEffect.ShowSnackbar -> {
@@ -172,7 +173,10 @@ fun SignUpScreen(
             )
             //Login button to navigate to login screen
             CustomizedTextButton(
-                onClick = {},
+                onClick = {
+
+                    viewModel.onEvent(SignUpEvent.onLoginClick)
+                },
                 text = "Login",
                 prefixText = "Already have an account?",
                 prefixTextColor = Color.Black
