@@ -66,7 +66,7 @@ class SignInViewModel @Inject constructor(
             }
 
             is SignInEvent.onSignUpClick -> {
-                viewModelScope.launch{
+                viewModelScope.launch(Dispatchers.IO) {
                     _uiEffect.emit(SignInEffect.navigateToSignUpScreen)
                 }
             }
@@ -106,9 +106,9 @@ class SignInViewModel @Inject constructor(
                                 )
                             }
                             Log.d("CHECK", "Signed In Sucesfully")
-                            _uiEffect.emit(SignInEffect.showSnackbar("Signed In Sucessfully"))
+                            _uiEffect.emit(SignInEffect.showToast("Signed In Sucessfully"))
 
-                            //_uiEffect.emit(SignInEffect.navigateToHomeScreen)
+                            _uiEffect.emit(SignInEffect.navigateToHomeScreen)
 
                         }
                     }

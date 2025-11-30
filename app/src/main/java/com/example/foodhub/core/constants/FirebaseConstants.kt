@@ -1,6 +1,7 @@
 package com.example.foodhub.core.constants
 
-object FirestoreConstants {
+object FirebaseConstants {
 
     const val USERS = "customers"
+    const val CATEGORIES = "categories"
 }

@@ -13,6 +13,7 @@ import com.example.foodhub.presentation.auth.sign_in_screen.SignInViewModel
 import com.example.foodhub.presentation.auth.sign_up_screen.SignUpScreen
 import com.example.foodhub.presentation.auth.sign_up_screen.SignUpViewModel
 import com.example.foodhub.presentation.home.HomeScreen
+import com.example.foodhub.presentation.home.HomeViewModel
 import com.google.firebase.auth.FirebaseAuth
 
 @Composable
@@ -70,7 +71,15 @@ fun NavGraph() {
                 )
             }
             entry<Routes.HomeScreen> {
-                HomeScreen()
+                val viewModel = hiltViewModel<HomeViewModel>()
+                HomeScreen(
+                    viewModel = viewModel,
+                    navigate = { route ->
+                        when (route) {
+                            else -> {}
+                        }
+                    }
+                )
             }
             entry<Routes.SignUpScreen> {
                 val viewModel = hiltViewModel<SignUpViewModel>()

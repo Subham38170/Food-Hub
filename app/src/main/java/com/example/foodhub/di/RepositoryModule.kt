@@ -1,12 +1,11 @@
 package com.example.foodhub.di
 
 import com.example.foodhub.data.repository.AuthRepositoryImpl
+import com.example.foodhub.data.repository.ProductRepositoryImpl
 import com.example.foodhub.domain.repository.AuthRepository
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
+import com.example.foodhub.domain.repository.ProductRepository
 import dagger.Binds
 import dagger.Module
-import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
@@ -20,4 +19,10 @@ abstract class RepositoryModule {
     abstract fun provideAuthRepository(
         authRepositoryImpl: AuthRepositoryImpl
     ): AuthRepository
+
+    @Binds
+    @Singleton
+    abstract fun provideProductRepository(
+        productRepositoryImpl: ProductRepositoryImpl
+    ): ProductRepository
 }

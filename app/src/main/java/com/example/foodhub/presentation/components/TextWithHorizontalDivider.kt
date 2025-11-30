@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.sp
 
 
 //Text format in screen
-// Horizontal divier in between text
+// Horizontal divider in between text
 @Composable
 fun TextWithHorizontalDivider(
     modifier: Modifier = Modifier,
