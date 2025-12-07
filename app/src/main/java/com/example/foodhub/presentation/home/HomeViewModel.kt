@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.foodhub.core.Result
 import com.example.foodhub.domain.use_cases.product.GetCategoriesUseCase
+import com.example.foodhub.domain.use_cases.restaurant.GetRestaurantsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
 import kotlinx.coroutines.Dispatchers
@@ -17,7 +18,8 @@ import kotlinx.coroutines.launch
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val getCategoriesUseCase: GetCategoriesUseCase
+    private val getCategoriesUseCase: GetCategoriesUseCase,
+    private val getRestaurantsUsecase: GetRestaurantsUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<HomeScreenState>(HomeScreenState())
@@ -29,7 +31,7 @@ class HomeViewModel @Inject constructor(
     init {
 
         getCategories()
-        getPopularResturants()
+        getPopularRestaurants()
     }
 
     private fun getCategories() {
@@ -72,7 +74,40 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun getPopularResturants() {
+    private fun getPopularRestaurants() {
+        viewModelScope.launch(Dispatchers.IO) {
+            getRestaurantsUsecase().collect { result ->
+                when (result) {
+                    is Result.Error -> {
+                        _uiState.update {
+                            it.copy(
+                                isRestaurantsLoading = false
+                            )
+                        }
+                        Log.d("RESTAURANT", "ErrorL ${result.message}")
+                        _uiEffect.emit(HomeScreenEffect.showSnackbar(result.message.toString()))
+                    }
 
+                    is Result.Loading -> {
+                        _uiState.update {
+                            it.copy(
+                                isRestaurantsLoading = true
+                            )
+                        }
+                        Log.d("RESTAURANT", "Loading")
+                    }
+
+                    is Result.Success -> {
+                        _uiState.update {
+                            it.copy(
+                                isRestaurantsLoading = false,
+                                restaurantsList = result.data
+                            )
+                        }
+                        Log.d("RESTAURANT", "Sucess ${result.data.toString()}")
+                    }
+                }
+            }
+        }
     }
 }

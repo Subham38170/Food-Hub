@@ -53,7 +53,7 @@ fun NavGraph() {
                         when (routes) {
                             is Routes.HomeScreen -> {
                                 backStack.apply {
-                                    removeLastOrNull()
+                                    clear()
                                     add(Routes.HomeScreen)
                                 }
                             }

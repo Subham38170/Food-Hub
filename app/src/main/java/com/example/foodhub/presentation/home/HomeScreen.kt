@@ -1,6 +1,7 @@
 package com.example.foodhub.presentation.home
 
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -13,6 +14,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.foodhub.presentation.components.CategoryItem
+import com.example.foodhub.presentation.components.RestaurantItem
 import com.example.foodhub.presentation.navigation.Routes
 import kotlinx.coroutines.flow.collectLatest
 
@@ -38,7 +40,7 @@ fun HomeScreen(
             }
         }
     }
-    Box(
+    Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(top = 200.dp)
@@ -46,11 +48,24 @@ fun HomeScreen(
 
         LazyRow(
             Modifier
-                .fillMaxWidth()
+                .fillMaxWidth(),
         ) {
-            items(state.categoryList) {
+            items(state.categoryList, { it.id.toString() }) {
                 CategoryItem(
                     category = it,
+                    onClick = {}
+                )
+            }
+        }
+        LazyRow(
+            modifier = Modifier
+                .fillMaxWidth(),
+
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            items(state.restaurantsList, { it.id.toString() }) {
+                RestaurantItem(
+                    restaurant = it,
                     onClick = {}
                 )
             }

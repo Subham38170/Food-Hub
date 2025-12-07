@@ -2,9 +2,11 @@ package com.example.foodhub.di
 
 import com.example.foodhub.domain.repository.AuthRepository
 import com.example.foodhub.domain.repository.ProductRepository
+import com.example.foodhub.domain.repository.RestaurantRepository
 import com.example.foodhub.domain.use_cases.auth.LoginUseCase
 import com.example.foodhub.domain.use_cases.auth.SignUpUseCase
 import com.example.foodhub.domain.use_cases.product.GetCategoriesUseCase
+import com.example.foodhub.domain.use_cases.restaurant.GetRestaurantsUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -33,4 +35,11 @@ object UseCaseModule {
     fun provideGetCategoriesUseCase(
         productRepo: ProductRepository
     ): GetCategoriesUseCase = GetCategoriesUseCase(productRepo)
+
+    @Provides
+    @Singleton
+    fun provideGetRestaurantsUseCase(
+        restaurantRepo: RestaurantRepository
+
+    ): GetRestaurantsUseCase = GetRestaurantsUseCase(restaurantRepo)
 }
